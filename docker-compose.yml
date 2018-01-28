@@ -2,13 +2,28 @@ version: '3'
 services:
   varnish:
     build: ./varnish
+    ports:
+      # Debug only
+      - 6082:6082
+    networks:
+      - frontend
   nginx:
     build: ./nginx
     volumes:
       - ./nginx/html:/usr/share/nginx/html
     ports:
+      # Debug only
       - 8080:80
+    networks:
+      - frontend
+      - backend
   php-fpm:
     image: php:7.2-fpm
     volumes:
       - ./php-fpm/myapp:/usr/src/myapp
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
