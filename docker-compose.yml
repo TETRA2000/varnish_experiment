@@ -3,7 +3,6 @@ services:
   varnish:
     build: ./varnish
     ports:
-      # Debug only
       - 6082:6082
     networks:
       - frontend
@@ -11,9 +10,6 @@ services:
     build: ./nginx
     volumes:
       - ./nginx/html:/usr/share/nginx/html
-    ports:
-      # Debug only
-      - 8080:80
     networks:
       - frontend
       - backend
@@ -26,4 +22,6 @@ services:
 
 networks:
   frontend:
+    driver: bridge
   backend:
+    driver: bridge
