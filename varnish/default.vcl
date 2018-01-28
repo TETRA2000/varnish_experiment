@@ -23,6 +23,13 @@ sub vcl_recv {
     # 
     # Typically you clean up the request here, removing cookies you don't need,
     # rewriting the request, etc.
+
+    if (req.url ~ "(?i)\.(jpeg|jpg|png|gif|ico|webp|js|css|txt|pdf|gz|zip|lzma|bz2|tgz|tbz|html|htm)$") {
+      unset req.http.Cookie;
+      return (hash);
+    } else {
+      return (pass);
+    }
 }
 
 sub vcl_backend_response {
@@ -35,6 +42,11 @@ sub vcl_backend_response {
 sub vcl_deliver {
     # Happens when we have all the pieces we need, and are about to send the
     # response to the client.
-    # 
+    #
     # You can do accounting or modifying the final object here.
+    if (obj.hits > 0) {
+            set resp.http.X-Cache = "HIT";
+    } else {
+            set resp.http.X-Cache = "MISS";
+    }
 }
