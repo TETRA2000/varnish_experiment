@@ -1,0 +1,14 @@
+version: '3'
+services:
+  varnish:
+    build: ./varnish
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./nginx/html:/usr/share/nginx/html
+    ports:
+      - 8080:80
+  php-fpm:
+    image: php:7.2-fpm
+    volumes:
+      - ./php-fpm/myapp:/usr/src/myapp
